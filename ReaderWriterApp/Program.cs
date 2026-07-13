@@ -68,6 +68,7 @@ class Program
                 else
                 {
                     Console.WriteLine($"Your mode is: {mode}. If the writer will stop, he will write /end at the end");
+                    Reader.Read(config);
                 }
             }
         }
