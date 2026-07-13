@@ -7,6 +7,7 @@ enum ExecutionMode
     Write
 }
 
+// Available values for the --flushMode flag
 enum FlushMode
 {
     Auto,
@@ -25,6 +26,7 @@ class Config: IDisposable
     public ExecutionMode Mode { get; private set; }
     public FlushMode FlushMode { get; private set; }
     
+    // Sets execution mode from input value.
     public void SetMode(string mode)
     {
         switch (mode)
@@ -40,12 +42,14 @@ class Config: IDisposable
         }
     }
     
+    // Opens or creates a file.
     public void SetFile(string filePath)
     {
         Dispose();
         File = new FileStream(filePath, FileMode.OpenOrCreate);
     }
     
+    // Sets flush mode from input value.
     public void SetFlushMode(string mode)
     {
         switch (mode)
@@ -60,7 +64,8 @@ class Config: IDisposable
                 throw new ArgumentException($"Invalid mode {mode}");
         }
     }
-
+    
+    // Closes the file stream.
     public void Dispose()
     {
         File?.Dispose();

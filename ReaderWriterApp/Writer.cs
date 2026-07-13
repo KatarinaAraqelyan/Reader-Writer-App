@@ -1,5 +1,6 @@
 namespace ReaderWriterApp;
 
+// Handles writing user input.
 internal static class Writer
 {
     public static void Write(Config config)
@@ -9,11 +10,8 @@ internal static class Writer
         while (true) 
         { 
             string? input = Console.ReadLine();
-            if (input?.ToLower().Trim() == "/end")
-            { 
-                break;
-            }
-
+            
+            // Manually writes buffered data to the file.
             if (input?.ToLower().Trim() == "/flush")
             {
                 writer.Flush();
@@ -22,6 +20,12 @@ internal static class Writer
             
             writer.WriteLine(input);
             
+            // Stops writing when the end command is entered.
+            if (input?.ToLower().Trim() == "/end")
+            { 
+                break;
+            }
+            // Automatically flushes data after each write.
             if (config.FlushMode == FlushMode.Auto) 
                     writer.Flush();
         }
