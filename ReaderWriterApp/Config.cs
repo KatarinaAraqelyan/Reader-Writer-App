@@ -3,8 +3,14 @@ namespace ReaderWriterApp;
 // Available values for the --mode flag
 enum ExecutionMode
 {
-    Read = 0,
-    Write = 1
+    Read,
+    Write
+}
+
+enum FlushMode
+{
+    Auto,
+    Manual
 }
 
 
@@ -18,6 +24,8 @@ class Config: IDisposable
 {
     public FileStream? File { get; private set; }
     public ExecutionMode Mode { get; private set; }
+    public FlushMode FlushMode { get; private set; }
+
 
     public void SetMode(string mode)
     {
@@ -39,6 +47,22 @@ class Config: IDisposable
         Dispose();
         File = new FileStream(filePath, FileMode.OpenOrCreate);
     }
+    
+    public void SetFlushMode(string mode)
+    {
+        switch (mode)
+        {
+            case "auto":
+                FlushMode = FlushMode.Auto;
+                break;
+            case "manual":
+                FlushMode = FlushMode.Manual;
+                break;
+            default:
+                throw new ArgumentException($"Invalid mode {mode}");
+        }
+    }
+    
 
     public void Dispose()
     {

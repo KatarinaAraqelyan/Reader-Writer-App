@@ -4,24 +4,72 @@ class Program
 {
     static void Main(string[] args)
     {
-        string? input;
-        Config config = new Config();
-
-        // Wait until the user enters a non-empty command.
-        while (true)
-        {
-            Console.Write("Enter command line arguments (e.g. --mode read --path test.txt): ");
-            input = Console.ReadLine();
-            
-            if (!string.IsNullOrWhiteSpace(input))
-                break;
-        }
+        string infoFilePath = "info.txt";
         
+        Config config = new Config();
+        string? input = null;
+        
+        if (File.Exists(infoFilePath))
+        {
+            int lineCount = File.ReadAllLines(infoFilePath).Length;
+            if (lineCount >= 2)
+            {
+                File.Delete(infoFilePath);
+            }
+        }
+      
+        if (!File.Exists(infoFilePath))
+        {
+            // Wait until the user enters a non-empty command.
+            while (true)
+            {
+                Console.Write("Enter command line arguments (mode can be read/write, flushMode can be manual/auto; e.g. --mode read --path test.txt --flushMode manual): ");               
+                input = Console.ReadLine();
+
+                if (!string.IsNullOrWhiteSpace(input))
+                    break;
+            }
+            
+            File.WriteAllText(infoFilePath, input + "\n");
+        } else
+        {
+            using StreamReader reader = new StreamReader(infoFilePath);
+            
+            string? firstUserChoice = reader.ReadLine();
+            if (firstUserChoice != null)
+            {
+                    string[] words = firstUserChoice.Split(' ');
+                    string secondUserMode = (words[1] == "read") ? "write" : "read";
+                    
+                    input = $"--mode {secondUserMode} {words[2]} {words[3]} {words[4]} {words[5]}";
+            }
+            
+            File.AppendAllText(infoFilePath, input + '\n');
+        }
+
         try
         {
-            // For now, a hardcoded command is used for easier testing. 
-            // In the final version, 'input' will be passed instead.
-            Parser.Parse("--mode read --path test.txt", config);
+            if (input != null)
+            {
+                Parser.Parse(input, config);
+
+                string[] words = input.Split(' ');
+                string mode = words[1];
+                string filPath = words[3];
+                string flashMode = words[5];
+
+
+                if (mode == "write")
+                {
+                    Console.WriteLine($"Your mode is: {mode}. If you want to stop, write /end");
+                    Writer.Write(config); 
+                }
+                else
+                {
+                    Console.WriteLine($"Your mode is: {mode}. If the writer will stop, he will write /end at the end");
+                    
+                }
+            }
         }
         catch (Exception e)
         {
