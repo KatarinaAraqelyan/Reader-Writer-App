@@ -13,7 +13,6 @@ enum FlushMode
     Manual
 }
 
-
 // Stores the application's configuration.
 // variable File: the file opened or created using the value of the --path flag.
 // variable Mode: the value specified by the --mode flag.
@@ -25,8 +24,7 @@ class Config: IDisposable
     public FileStream? File { get; private set; }
     public ExecutionMode Mode { get; private set; }
     public FlushMode FlushMode { get; private set; }
-
-
+    
     public void SetMode(string mode)
     {
         switch (mode)
@@ -62,7 +60,6 @@ class Config: IDisposable
                 throw new ArgumentException($"Invalid mode {mode}");
         }
     }
-    
 
     public void Dispose()
     {
