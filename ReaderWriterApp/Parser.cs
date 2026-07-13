@@ -16,7 +16,7 @@ static class Parser
                 config.SetFile(value);
                 break;
             case "--flushMode":
-                config.SetFile(value);
+                config.SetFlushMode(value);
                 break;
             default:
                 throw new ArgumentException($"Invalid flag {flag}");
@@ -33,6 +33,7 @@ static class Parser
 
         switch (args.Length)
         {
+            case 4:
             case 6:
                 ParseFlag(args[0], args[1], config);
                 ParseFlag(args[2], args[3], config);
