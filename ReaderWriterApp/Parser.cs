@@ -24,8 +24,8 @@ static class Parser
     }
     
     // Parses the entire command line and updates the Config object.
-    // Expects exactly two flag-value pairs:
-    //   --mode <read|write> --path <file>
+    // Expects exactly three flag-value pairs:
+    //   --mode <read|write> --path <file> --flushMode <auto|manual> 
     // Throws an exception if the number of arguments is invalid. 
     public static void Parse(string line, Config config)
     {
